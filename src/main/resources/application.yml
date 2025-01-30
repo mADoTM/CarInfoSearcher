@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: carinfosearcher
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/car_info_searcher}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_USERNAME:root}
+
+  jpa:
+    generate-ddl: false
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate.show_sql: false
+
+  liquibase:
+    change-log: classpath:db/liquibase/changelog.xml
+
+  data:
+    redis:
+      host: localhost
+      database: 0
+      port: 6379
+      password: car
+
+http:
+  user-agent: Mozilla/5.0 (Windows NT 6.0; nso-ZA; rv:1.9.1.20) Gecko/2014-09-03 14:34:54 Firefox/9.0
+
+rest:
+  bdi-history:
+    url: https://cars.autotorgby.com/istoriya-prodazh-copart-iaai-manheim?VIN=
+    timeout: 4000
+  auction-history:
+    url: https://auctionhistory.io/item/
+    timeout: 4000
+
+telegram:
+  token: ${TELEGRAM_BOT_HTTP_KEY}
+  bot-name: CarInfoSearcher
+
+queue-puller:
+  cron: "0 0/5 * * * ?"
+
+cache:
+  redis:
+    allow-null-values: true
+    expire-time: 1d
