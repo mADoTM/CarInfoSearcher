@@ -40,7 +40,7 @@ telegram:
   bot-name: CarInfoSearcher
 
 queue-puller:
-  cron: "0 0/5 * * * ?"
+  cron: "0 0/1 * * * ?"
 
 cache:
   redis:

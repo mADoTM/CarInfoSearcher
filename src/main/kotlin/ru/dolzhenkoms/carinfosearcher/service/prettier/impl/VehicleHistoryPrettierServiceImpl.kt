@@ -3,7 +3,7 @@ package ru.dolzhenkoms.carinfosearcher.service.prettier.impl
 import org.springframework.stereotype.Service
 import ru.dolzhenkoms.carinfosearcher.model.jpa.HistoryEntity
 import ru.dolzhenkoms.carinfosearcher.service.prettier.VehicleHistoryPrettierService
-import ru.dolzhenkoms.carinfosearcher.utils.toLocateDate
+import ru.dolzhenkoms.carinfosearcher.utils.toLocalDate
 
 @Service
 class VehicleHistoryPrettierServiceImpl : VehicleHistoryPrettierService {
@@ -26,6 +26,6 @@ class VehicleHistoryPrettierServiceImpl : VehicleHistoryPrettierService {
 
     private fun prettyListOfOneFieldHistory(fieldName: String, history: List<HistoryEntity>): String {
         return "$fieldName:\n" +
-                history.joinToString(separator = "\n") { "${it.createdTs?.toLocateDate() ?: ""} - ${it.value} " }
+                history.joinToString(separator = "\n") { "${it.createdTs?.toLocalDate() ?: ""} - ${it.value} " }
     }
 }
