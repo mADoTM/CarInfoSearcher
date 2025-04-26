@@ -9,28 +9,30 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.time.Instant
 import java.util.UUID
+import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import ru.dolzhenkoms.carinfosearcher.model.jpa.types.SourceType
+import ru.dolzhenkoms.carinfosearcher.integration.telegram.command.CommandType
 
 @Entity
-@Table(name = "history_queue_entity")
+@Table(name = "user_calls")
 @EntityListeners(AuditingEntityListener::class)
-class HistoryQueueEntity (
+class UserCallsEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: UUID? = null,
 
-    @Column(name = "vin", nullable = false, updatable = false)
-    val vin: String,
+    @Column(name = "username", nullable = false, updatable = false)
+    val username: String,
 
-    @Column(name = "data", nullable = true, updatable = false)
-    val data: String?,
-
+    @Column(name = "command_name", nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
-    val sourceType: SourceType,
+    val command: CommandType,
 
-    @Column(name = "user_call_id")
-    val userCallId: UUID?,
+    @CreatedDate
+    @Column(name = "created_ts", nullable = false, updatable = false)
+    var created: Instant? = null
+
 )

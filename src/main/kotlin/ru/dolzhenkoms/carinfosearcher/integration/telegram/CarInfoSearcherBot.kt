@@ -27,10 +27,10 @@ class CarInfoSearcherBot(
     private fun handleMessage(update: Update) {
         val messageText = update.message.text
 
-        val commandText = messageText.split(" ")[0]
+        val rawCommand = messageText.split(" ")[0]
 
         try {
-            val command = commandFactory.getCommandByString(commandText)
+            val command = commandFactory.getCommandByString(rawCommand)
 
             command.execute(update).forEach { message ->
                 executeMessage(message)

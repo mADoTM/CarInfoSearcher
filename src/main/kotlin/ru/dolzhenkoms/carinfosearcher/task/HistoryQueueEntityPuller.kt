@@ -24,7 +24,12 @@ class HistoryQueueEntityPuller(
         val typeRef = object : TypeReference<HashMap<String, String?>>() {}
         val historyValues = runCatching { objectMapper.readValue(newValues.data, typeRef) }.getOrNull() ?: return
 
-        historyService.tryToFillHistoryByNewValues(newValues.vin, historyValues, newValues.sourceType)
+        historyService.tryToFillHistoryByNewValues(
+            newValues.vin,
+            historyValues,
+            newValues.sourceType,
+            newValues.userCallId!!,
+        )
 
         queueRepository.delete(newValues)
     }

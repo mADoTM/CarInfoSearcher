@@ -9,10 +9,11 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.time.Instant
+import java.util.UUID
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import ru.dolzhenkoms.carinfosearcher.model.jpa.types.SourceType
-import java.time.Instant
 
 @Entity
 @Table(name = "history_entity")
@@ -35,9 +36,11 @@ class HistoryEntity (
     @Enumerated(EnumType.STRING)
     val sourceType: SourceType,
 
+    @Column(name = "user_call_id")
+    val userCallId: UUID?,
+
     @CreatedDate
     @Column(name = "created_ts", nullable = false, updatable = false)
     var createdTs: Instant? = null,
 
 )
-

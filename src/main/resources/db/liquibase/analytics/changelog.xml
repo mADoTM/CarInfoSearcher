@@ -1,0 +1,26 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd"
+>
+    <changeSet id="user_calls" author="m.s.dolzhenko">
+        <sql>
+            CREATE TABLE IF NOT EXISTS user_calls (
+            id UUID DEFAULT gen_random_uuid(),
+            username VARCHAR NOT NULL,
+            command_name VARCHAR,
+            created_ts TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+            CONSTRAINT pk_user_calls PRIMARY KEY (id)
+            );
+
+            ALTER TABLE history_entity ADD COLUMN IF NOT EXISTS
+            user_call_id UUID NOT NULL DEFAULT gen_random_uuid();
+
+            ALTER TABLE history_queue_entity ADD COLUMN IF NOT EXISTS
+            user_call_id UUID NOT NULL DEFAULT gen_random_uuid();
+
+            CREATE INDEX IF NOT EXISTS user_calls_username_idx ON user_calls(username)
+        </sql>
+    </changeSet>
+</databaseChangeLog>

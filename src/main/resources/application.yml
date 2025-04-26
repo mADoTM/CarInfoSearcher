@@ -29,7 +29,7 @@ http:
 
 rest:
   bdi-history:
-    url: https://cars.autotorgby.com/istoriya-prodazh-copart-iaai-manheim?VIN=
+    url: https://{VIN}.saleshistory.org
     timeout: 4000
   auction-history:
     url: https://auctionhistory.io/item/

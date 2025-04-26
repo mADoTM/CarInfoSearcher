@@ -1,6 +1,7 @@
 package ru.dolzhenkoms.carinfosearcher.service.searcher.bdi.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.util.UUID
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import ru.dolzhenkoms.carinfosearcher.client.AuctionHistoryClient
@@ -26,7 +27,7 @@ class AuctionHistorySearcherImpl(
 ) : AuctionHistorySearcher {
 
     @Cacheable(AUCTION_HISTORY, key = "#vin")
-    override fun findByVin(vin: String): CarInfoDto? {
+    override fun findByVin(vin: String, userId: UUID): CarInfoDto? {
         val searchHttpResponse = runCatching { client.execute(query = vin) }.getOrNull()
 
         val body = searchHttpResponse?.parse()
@@ -69,7 +70,8 @@ class AuctionHistorySearcherImpl(
                 HistoryQueueEntity(
                     vin = vin,
                     data = dataAsJson,
-                    sourceType = SourceType.AUCTION_HISTORY
+                    sourceType = SourceType.AUCTION_HISTORY,
+                    userCallId = userId,
                 )
             )
         }

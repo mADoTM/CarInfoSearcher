@@ -6,10 +6,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.dolzhenkoms.carinfosearcher.integration.telegram.command.BotCommand
 import ru.dolzhenkoms.carinfosearcher.integration.telegram.command.CommandType
+import ru.dolzhenkoms.carinfosearcher.service.UserCallsService
 
 @Component
 class HelpCommand(
-    private var commandsList: List<BotCommand>
+    private var commandsList: List<BotCommand>,
+    private val userCallsService: UserCallsService,
 ) : BotCommand {
 
     @PostConstruct
@@ -23,7 +25,9 @@ class HelpCommand(
         text = commandsList.joinToString(separator = "\n~~~~~~~~~\n") { command ->
             "${command.getCommandName()} - ${command.getCommandDescription()}\n"
         }
-    })
+    }).also {
+        userCallsService.saveUserCall(update.message?.from?.userName ?: "[bad username]", CommandType.HELP)
+    }
 
     override fun getCommandName() = CommandType.HELP.title
 

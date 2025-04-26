@@ -5,15 +5,22 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.dolzhenkoms.carinfosearcher.integration.telegram.command.BotCommand
 import ru.dolzhenkoms.carinfosearcher.integration.telegram.command.CommandType
+import ru.dolzhenkoms.carinfosearcher.service.UserCallsService
 import ru.dolzhenkoms.carinfosearcher.service.jpa.HistoryEntityService
 import ru.dolzhenkoms.carinfosearcher.service.prettier.VehicleHistoryPrettierService
 
 @Component
 class HistoryCommand(
     private val historyService: HistoryEntityService,
-    private val prettierService: VehicleHistoryPrettierService
+    private val prettierService: VehicleHistoryPrettierService,
+    private val userCallsService: UserCallsService,
 ) : BotCommand {
     override fun execute(update: Update): List<SendMessage> {
+        userCallsService.saveUserCall(
+            update.message?.from?.userName ?: "[bad username]",
+            CommandType.HISTORY
+        )
+
         val chatId = update.message.chatId?.toString().toString()
 
         val textRawsFromUpdate = update.message.text?.split(" ")

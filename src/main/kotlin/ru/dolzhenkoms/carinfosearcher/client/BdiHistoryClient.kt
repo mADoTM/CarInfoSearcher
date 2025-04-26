@@ -13,7 +13,7 @@ class BdiHistoryClient(
 ) {
 
     fun execute(query: String): Connection.Response {
-        val fullSearchUrl = "${bdiHistoryRestProperties.url}$query"
+        val fullSearchUrl = bdiHistoryRestProperties.url.replace("{VIN}", query)
 
         return Jsoup.connect(fullSearchUrl)
             .method(Connection.Method.GET)

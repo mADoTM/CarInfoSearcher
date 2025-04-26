@@ -6,13 +6,19 @@ import ru.dolzhenkoms.carinfosearcher.model.jpa.types.SourceType
 import ru.dolzhenkoms.carinfosearcher.repository.jpa.HistoryEntityRepository
 import ru.dolzhenkoms.carinfosearcher.service.jpa.HistoryEntityService
 import java.time.Instant
+import java.util.UUID
 
 @Service
 class HistoryEntityServiceImpl(
     private val repository: HistoryEntityRepository
 ) : HistoryEntityService {
 
-    override fun tryToFillHistoryByNewValues(vin: String, values: Map<String, String?>, sourceType: SourceType) {
+    override fun tryToFillHistoryByNewValues(
+        vin: String,
+        values: Map<String, String?>,
+        sourceType: SourceType,
+        userId: UUID
+    ) {
         val actualValues = repository.findNewestByVinAndSourceType(vin, sourceType.name)
             .associateBy { entity -> entity.fieldName }
 
@@ -33,7 +39,8 @@ class HistoryEntityServiceImpl(
                     vin = vin,
                     sourceType = sourceType,
                     value = it.second,
-                    fieldName = it.first
+                    fieldName = it.first,
+                    userCallId = userId,
                 )
             )
         }

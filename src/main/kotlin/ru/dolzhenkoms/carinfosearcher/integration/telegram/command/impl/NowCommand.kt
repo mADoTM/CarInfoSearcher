@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.dolzhenkoms.carinfosearcher.integration.telegram.command.BotCommand
 import ru.dolzhenkoms.carinfosearcher.integration.telegram.command.CommandType
+import ru.dolzhenkoms.carinfosearcher.service.UserCallsService
 import ru.dolzhenkoms.carinfosearcher.service.prettier.CarInfoDtoPrettierService
 import ru.dolzhenkoms.carinfosearcher.service.searcher.SearchVehicleInfoService
 
@@ -12,15 +13,22 @@ import ru.dolzhenkoms.carinfosearcher.service.searcher.SearchVehicleInfoService
 class NowCommand(
     private val searchInfoService: SearchVehicleInfoService,
     private val prettier: CarInfoDtoPrettierService,
+    private val userCallsService: UserCallsService,
 ) : BotCommand {
     override fun execute(update: Update): List<SendMessage> {
+        val username = update.message?.from?.userName ?: "[bad username]"
+        val userId = userCallsService.saveUserCall(
+            username,
+            CommandType.NOW
+        )
+
         val chatId = update.message.chatId?.toString().toString()
 
         val textRawsFromUpdate = update.message.text?.split(" ")
 
         val vin = textRawsFromUpdate?.get(1) ?: throw IllegalArgumentException("Некорректно передан VIN")
 
-        val foundedInfos = searchInfoService.searchInfo(vin)
+        val foundedInfos = searchInfoService.searchInfo(vin, userId)
 
         if (foundedInfos.isEmpty()) return buildNotFoundMessage(chatId)
 

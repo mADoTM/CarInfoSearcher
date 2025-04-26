@@ -1,5 +1,6 @@
 package ru.dolzhenkoms.carinfosearcher.service.searcher
 
+import java.util.UUID
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -12,11 +13,11 @@ class SearchVehicleInfoService(
     private val searchers: List<Searcher>
 ) {
 
-    fun searchInfo(vin: String): Map<SourceType, CarInfoDto?> {
+    fun searchInfo(vin: String, userId: UUID): Map<SourceType, CarInfoDto?> {
         return runBlocking {
             searchers.map { searcher ->
                 async {
-                    searcher.getType() to searcher.findByVin(vin)
+                    searcher.getType() to searcher.findByVin(vin, userId)
                 }
             }.awaitAll()
         }.toMap()
